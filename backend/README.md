@@ -33,4 +33,6 @@ NodeJS Based API Server
 ### Gerar documentação da API
 Será criado um diretório chamado `apidoc` dentro de `./public`
 
+	npm install -g apidoc
+
 	npm run docs
