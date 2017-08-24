@@ -47,7 +47,8 @@ Será criado um diretório chamado `apidoc` dentro de `./public`
 
 	npm run docs
 
-===
+---
+---
 
 ## Frontend
 
