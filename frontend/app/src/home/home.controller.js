@@ -10,6 +10,7 @@ angular.module('k121.controllers', [])
     function($scope, $log, utilService, $location, $route) {
         $log.debug('HomeController');
         $scope.failed = false;
+        $scope.buttonDisabled = false;
         
         $scope.tableConfig = {
             data: [],
@@ -78,9 +79,11 @@ angular.module('k121.controllers', [])
         }
 
         function doDraw () {
+            $scope.buttonDisabled = true;
             utilService.draw().then(
-                function () {
-                    $route.reload();
+                function (people) {
+                    $scope.buttonDisabled = false;
+                    $scope.tableConfig.data = people.data;
                 }
             )
         }

@@ -10,13 +10,6 @@ var response = function (res, message) {
     res.json(message.data);
 };
 
-router.get('/draw', function (req, res) {
-    controller.draw()
-        .then(function (message) {
-            response(res, message);
-        });
-});
-
 /**
  * @api {get} /api/secret Get all people
  * @apiVersion 1.0.0
@@ -44,6 +37,36 @@ router.get('/', function (req, res) {
         .then(function (message) {
             response(res, message);
         });
+});
+
+/**
+ * @api {get} /api/secret/draw Draw people
+ * @apiVersion 1.0.0
+ * @apiGroup Secret
+ * 
+ * @apiSuccess {Object[]} secret People array
+ * @apiSuccess {String} secret._id Person ID
+ * @apiSuccess {String} secret.name Person name
+ * @apiSuccess {Number} secret.email Person email
+ * @apiSuccess {Number} secret.friend Person's secret friend
+ * @apiSuccessExample {json} Success-Response:
+ *    HTTP/1.1 200 OK
+ *    [{
+ *      "_id": "58e6ef7537ddf7e67c37f7e5",
+ *      "name": "João Paulo",
+ *      "email": "contato@joaopaulo.eti.br",
+ *      "friend": "Paiva"
+ *    }]
+ * 
+ * @apiErrorExample {json} List error
+ *    HTTP/1.1 500 Internal Server Error
+ */
+
+router.get('/draw', function (req, res) {
+    controller.draw()
+        .then(function (message) {
+            response(res, message);
+        }); 
 });
 
 /**

@@ -2,7 +2,10 @@
 
 var mongoose = require('mongoose'),
 	Secret = require('./secret.model'),
-	_ = require('lodash');
+	Q = require('q'),
+	_ = require('lodash'),
+	draw = require('../../lib/draw'),
+	sendMail = require('../../lib/sendMail');
 
 var responseMessage = function (data, statusCode) {
   return {
@@ -62,12 +65,22 @@ exports.update = function (id, data) {
 };
 
 exports.draw = function () {
-	doDraw();
-};
-
-function doDraw(people) {
-	Secret.find()
-		.then(function(people) {
-			console.log(people);
+	return Secret.find()
+		.then(function (people) {
+			return draw(people);
 		})
-}
+		.then(function (people) {
+			var promises = _.map(people, function (person) {
+				return Secret.update({ _id: person._id }, person);
+			});
+
+			return [people, Q.all(promises)];
+		})
+		.spread(function (people) {
+			sendMail(people);
+			return responseMessage(people, 200);
+		})
+		.fail(function (err) {
+			return responseMessage(err, 422);
+		})
+};
